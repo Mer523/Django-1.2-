@@ -1,0 +1,47 @@
+from django.shortcuts import render
+
+DATA = {
+    'omlet': {
+        'яйца, шт': 2,
+        'молоко, л': 0.1,
+        'соль, ч.л.': 0.5,
+    },
+    'pasta': {
+        'макароны, г': 0.3,
+        'сыр, г': 0.05,
+    },
+    'buter': {
+        'хлеб, ломтик': 1,
+        'колбаса, ломтик': 1,
+        'сыр, ломтик': 1,
+        'помидор, ломтик': 1,
+    },
+    'pasta_in_the_navy': {
+        'мясо, г': 0.3,
+        'лук, шт': 1,
+        'макароны, г': 0.2,
+        'масло, с.л.': 0.2,
+    }
+    # можете добавить свои рецепты ;)
+}
+
+
+# Напишите ваш обработчик. Используйте DATA как источник данных
+# Результат - render(request, 'calculator/index.html', context)
+# В качестве контекста должен быть передан словарь с рецептом:
+# context = {
+#   'recipe': {
+#     'ингредиент1': количество1,
+#     'ингредиент2': количество2,
+#   }
+# }
+
+def cook_this(request, dish):
+    servings = int(request.GET.get('servings', 1))
+    context = {}
+    if dish in DATA:
+        recipe = {}
+        for ingredient, amount in DATA[dish].items():
+            recipe[ingredient] = amount * servings
+        context['recipe'] = recipe
+    return render(request, 'calculator/index.html', context)
